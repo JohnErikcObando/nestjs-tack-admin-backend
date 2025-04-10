@@ -1,0 +1,22 @@
+version: '3.3'
+
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      - POSTGRES_DB=track_db
+      - POSTGRES_USER=track
+      - POSTGRES_PASSWORD=TrackESZ798
+      - TZ=America/Bogota  # Aquí se establece la zona horaria
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=root@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "5050:80"
