@@ -1,3 +1,4 @@
+import { Empresas } from '@src/empresas/entities/empresas.entity';
 import {
   Entity,
   Column,
@@ -6,6 +7,8 @@ import {
   BeforeUpdate,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -69,6 +72,10 @@ export class Viajes {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => Empresas, (empresas) => empresas.viajes)
+  @JoinColumn({ name: 'empresa_id' }) // Esto es opcional, define el nombre de la columna FK
+  empresa: Empresas;
 
   @BeforeInsert()
   @BeforeUpdate()

@@ -141,6 +141,9 @@ export class CreateViajeDto {
   @IsUrl()
   link_comprobante?: string;
 
+  @IsNumber()
+  empresa_id: string;
+
   @ApiProperty({
     description: 'Fecha de creación del viaje',
     example: '2024-10-10T12:00:00Z',
