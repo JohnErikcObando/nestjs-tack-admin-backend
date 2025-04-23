@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+
 import { viajeProviders } from './providers/viaje.providers';
 import { ViajeController } from './controllers/viaje.controller';
 import { ViajeService } from './services/viaje.service';

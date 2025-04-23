@@ -21,10 +21,10 @@ export class Usuarios {
   @Column()
   password: string;
 
-  @Column({ nullable: true })
+  @Column()
   nombre?: string;
 
-  @Column({ nullable: true })
+  @Column()
   apellido?: string;
 
   @Column({ default: 'user' })

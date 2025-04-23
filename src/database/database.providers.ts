@@ -1,7 +1,5 @@
 import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
-import { Viaje } from '@src/viaje/entities/viajes.entity';
-import * as path from 'path';
 
 dotenv.config();
 
@@ -22,6 +20,10 @@ export const databaseProviders = [
             : __dirname + '/../**/*.entity{.ts,.js}',
         ],
         synchronize: false,
+        extra: {
+          application_name: 'track_admin_backend',
+          options: '-c timezone=America/Bogota', // Esta es la forma correcta
+        },
       });
 
       return dataSource.initialize();

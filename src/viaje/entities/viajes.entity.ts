@@ -4,12 +4,17 @@ import {
   PrimaryGeneratedColumn,
   BeforeInsert,
   BeforeUpdate,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
 export class Viajes {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  manifiesto: string;
 
   @Column()
   fecha: Date;
@@ -53,11 +58,17 @@ export class Viajes {
   @Column('boolean', { default: false })
   pago_completado: boolean;
 
-  @Column({ nullable: true })
+  @Column()
   link_comprobante: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   fecha_creacion: Date;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @BeforeInsert()
   @BeforeUpdate()

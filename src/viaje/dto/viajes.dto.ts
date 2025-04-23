@@ -13,6 +13,14 @@ import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export class CreateViajeDto {
   @ApiProperty({
+    description: 'manifiesto del viaje realizado',
+    example: '00000',
+  })
+  @IsNotEmpty()
+  @IsString()
+  manifiesto: string;
+
+  @ApiProperty({
     description: 'Fecha del viaje',
     example: '2023-10-10T12:00:00Z',
   })
