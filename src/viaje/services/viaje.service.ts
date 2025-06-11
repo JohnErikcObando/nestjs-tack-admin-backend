@@ -1,30 +1,46 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Viajes } from '../entities/viajes.entity';
-import { CreateViajeDto } from '../dto/viajes.dto';
-import { UpdateViajeDto } from '../dto/viajes.dto';
+
+import { CreateViajeDto, UpdateViajeDto } from '../dto/viaje.dto';
+import { Viaje } from '../entities/viaje.entity';
 
 @Injectable()
 export class ViajeService {
   constructor(
     @Inject('VIAJE_REPOSITORY')
-    private readonly viajeRepository: Repository<Viajes>,
+    private readonly viajeRepository: Repository<Viaje>,
   ) {}
 
   // Crear un nuevo viaje
-  async create(createViajeDto: CreateViajeDto): Promise<Viajes> {
+  async create(createViajeDto: CreateViajeDto): Promise<Viaje> {
     const viaje = this.viajeRepository.create(createViajeDto);
     return await this.viajeRepository.save(viaje);
   }
 
   // Obtener todos los viajes
-  async findAll(): Promise<Viajes[]> {
-    return await this.viajeRepository.find();
+  async findAll(): Promise<Viaje[]> {
+    return await this.viajeRepository.find({
+      relations: [
+        'empresa', // Carga la empresa
+        'origen', // Carga el municipio origen
+        'destino', // Carga el municipio destino
+        'documentos', // Carga los documentos asociados
+      ]
+    });
   }
 
   // Obtener un viaje por su ID
-  async findOne(id: number): Promise<Viajes> {
-    const viaje = await this.viajeRepository.findOne({ where: { id } });
+  async findOne(id: number): Promise<Viaje> {
+    const viaje = await this.viajeRepository.findOne({
+      where: { id },
+      relations: [
+        'empresa', // Carga la empresa
+        'origen', // Carga el municipio origen
+        'destino', // Carga el municipio destino
+        'documentos', // Carga los documentos asociados
+      ],
+    });
+
     if (!viaje) {
       throw new NotFoundException(`Viaje con ID ${id} no encontrado`);
     }
@@ -32,7 +48,7 @@ export class ViajeService {
   }
 
   // Actualizar un viaje existente
-  async update(id: number, updateViajeDto: UpdateViajeDto): Promise<Viajes> {
+  async update(id: number, updateViajeDto: UpdateViajeDto): Promise<Viaje> {
     const viaje = await this.findOne(id); // Verifica si el viaje existe
     this.viajeRepository.merge(viaje, updateViajeDto); // Fusiona los datos
     return await this.viajeRepository.save(viaje); // Guarda los cambios

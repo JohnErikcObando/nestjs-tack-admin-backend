@@ -7,16 +7,13 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('usuarios')
 export class Usuarios {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
   username: string;
-
-  @Column({ unique: true })
-  email: string;
 
   @Column()
   password: string;
@@ -27,8 +24,14 @@ export class Usuarios {
   @Column()
   apellido?: string;
 
+  @Column({ unique: true })
+  email: string;
+
+  @Column({ default: true })
+  activo: boolean;
+
   @Column({ default: 'user' })
-  role: string;
+  rol: string;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,29 +1,29 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Like, Repository } from 'typeorm';
 
-import { Empresas } from '../entities/empresas.entity';
-import { CreateEmpresaDTO, UpdateEmpresaDTO } from '../dtos/empresas.dto';
+import { Empresa } from '../entities/empresa.entity';
+import { CreateEmpresaDTO, UpdateEmpresaDTO } from '../dtos/empresa.dto';
 
 @Injectable()
 export class EmpresasService {
   constructor(
     @Inject('EMPRESA_REPOSITORY')
-    private readonly empresaRepository: Repository<Empresas>,
+    private readonly empresaRepository: Repository<Empresa>,
   ) {}
 
   // Crear un nuevo empresa
-  async create(createUpdateDto: CreateEmpresaDTO): Promise<Empresas> {
-    const empresa = this.empresaRepository.create(createUpdateDto);
+  async create(createEmpresaDTO: CreateEmpresaDTO): Promise<Empresa> {
+    const empresa = this.empresaRepository.create(createEmpresaDTO);
     return await this.empresaRepository.save(empresa);
   }
 
   // Obtener todos los empresas
-  async findAll(): Promise<Empresas[]> {
+  async findAll(): Promise<Empresa[]> {
     return await this.empresaRepository.find();
   }
 
   // Obtener un viaje por su ID
-  async findOne(id: number): Promise<Empresas> {
+  async findOne(id: number): Promise<Empresa> {
     const empresa = await this.empresaRepository.findOne({ where: { id } });
     if (!empresa) {
       throw new NotFoundException(`empresa con ID ${id} no encontrado`);
@@ -35,7 +35,7 @@ export class EmpresasService {
   async update(
     id: number,
     UpdateEmpresaDTO: UpdateEmpresaDTO,
-  ): Promise<Empresas> {
+  ): Promise<Empresa> {
     const empresa = await this.findOne(id); // Verifica si el empresa existe
     this.empresaRepository.merge(empresa, UpdateEmpresaDTO); // Fusiona los datos
     return await this.empresaRepository.save(empresa); // Guarda los cambios

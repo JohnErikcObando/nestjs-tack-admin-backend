@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 
 import { EmpresasService } from '../services/empresas.service';
-import { CreateEmpresaDTO, UpdateEmpresaDTO } from '../dtos/empresas.dto';
+import { CreateEmpresaDTO, UpdateEmpresaDTO } from '../dtos/empresa.dto';
 
 @Controller('empresas')
 export class EmpresasController {
