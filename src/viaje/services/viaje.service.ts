@@ -1,7 +1,11 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 
-import { CreateViajeDto, UpdateViajeDto } from '../dto/viaje.dto';
+import {
+  CreateViajeDto,
+  UpdatePagoCompletadoDto,
+  UpdateViajeDto,
+} from '../dto/viaje.dto';
 import { Viaje } from '../entities/viaje.entity';
 
 @Injectable()
@@ -25,7 +29,7 @@ export class ViajeService {
         'origen', // Carga el municipio origen
         'destino', // Carga el municipio destino
         'documentos', // Carga los documentos asociados
-      ]
+      ],
     });
   }
 
@@ -52,6 +56,15 @@ export class ViajeService {
     const viaje = await this.findOne(id); // Verifica si el viaje existe
     this.viajeRepository.merge(viaje, updateViajeDto); // Fusiona los datos
     return await this.viajeRepository.save(viaje); // Guarda los cambios
+  }
+
+  async updatePagoCompletado(
+    id: number,
+    dto: UpdatePagoCompletadoDto,
+  ): Promise<Viaje> {
+    const viaje = await this.findOne(id);
+    viaje.pago_completado = dto.pago_completado;
+    return await this.viajeRepository.save(viaje);
   }
 
   // Eliminar un viaje

@@ -4,11 +4,16 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
 } from '@nestjs/common';
 import { ViajeService } from '../services/viaje.service';
-import { CreateViajeDto, UpdateViajeDto } from '../dto/viaje.dto';
+import {
+  CreateViajeDto,
+  UpdatePagoCompletadoDto,
+  UpdateViajeDto,
+} from '../dto/viaje.dto';
 
 @Controller('viajes')
 export class ViajeController {
@@ -35,6 +40,14 @@ export class ViajeController {
     @Body() updateViajeDto: UpdateViajeDto,
   ) {
     return this.viajeService.update(id, updateViajeDto);
+  }
+
+  @Patch(':id/pago')
+  async updatePagoCompletado(
+    @Param('id') id: number,
+    @Body() dto: UpdatePagoCompletadoDto,
+  ) {
+    return this.viajeService.updatePagoCompletado(id, dto);
   }
 
   @Delete(':id')

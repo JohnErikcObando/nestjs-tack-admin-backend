@@ -185,3 +185,14 @@ export class CreateViajeDto {
 }
 
 export class UpdateViajeDto extends PartialType(CreateViajeDto) {}
+
+export class UpdatePagoCompletadoDto {
+  @ApiProperty({
+    description: 'Indica si el pago está completado',
+    example: true,
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsBoolean()
+  pago_completado: boolean;
+}

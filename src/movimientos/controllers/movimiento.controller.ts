@@ -13,7 +13,7 @@ import {
 } from '../dto/movimiento.dto';
 import { MovimientoService } from '../services/movimiento.service';
 
-@Controller('movimiento')
+@Controller('movimientos')
 export class MovimientoController {
   constructor(private readonly movimientoService: MovimientoService) {}
 

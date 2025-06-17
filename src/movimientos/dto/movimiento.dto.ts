@@ -11,8 +11,9 @@ import {
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export enum Tipo {
-  INGRESO = 'ingreso',
-  GASTO = 'gasto',
+  INGRESO = 'Ingreso',
+  GASTO = 'Gasto',
+  ANTICIPOS = 'Anticipo',
 }
 
 export class CreateMovimientoDto {
@@ -22,7 +23,7 @@ export class CreateMovimientoDto {
   fecha: Date;
 
   @ApiProperty({
-    description: 'tipo del movimiento (ingreso/gasto)',
+    description: 'tipo del movimiento (Ingreso/Gasto)',
     example: 'ingreso',
     enum: Tipo,
     default: Tipo.INGRESO,
@@ -36,7 +37,6 @@ export class CreateMovimientoDto {
     example: 'Pago por servicio de transporte',
     description: 'Descripción del movimiento',
   })
-  @IsNotEmpty()
   @IsString()
   descripcion: string;
 
@@ -51,7 +51,6 @@ export class CreateMovimientoDto {
     required: false,
   })
   @IsOptional()
-  @IsUrl()
   link?: string;
 }
 
