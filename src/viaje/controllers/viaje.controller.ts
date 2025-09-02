@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ViajeService } from '../services/viaje.service';
 import {
@@ -25,8 +26,11 @@ export class ViajeController {
   }
 
   @Get()
-  async findAll() {
-    return this.viajeService.findAll();
+  async findAll(
+    @Query('fecha_inicio') fecha_inicio?: Date,
+    @Query('fecha_final') fecha_final?: Date,
+  ) {
+    return this.viajeService.findAll(fecha_inicio, fecha_final);
   }
 
   @Get(':id')

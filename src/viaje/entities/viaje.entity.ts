@@ -1,12 +1,11 @@
 import { Documento } from '@src/documentos/entities/documento.entity';
 import { Empresa } from '@src/empresas/entities/empresa.entity';
 import { Municipio } from '@src/municipio/entities/municipio.entity';
+import { Vehiculo } from '@src/vehiculo/entities/vehiculo.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  BeforeInsert,
-  BeforeUpdate,
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
@@ -26,34 +25,34 @@ export class Viaje {
   manifiesto: string;
 
   // Campos monetarios
-  @Column('decimal', { precision: 15, scale: 2 })
+  @Column({ type: 'integer' })
   valor: number;
 
-  @Column('decimal', { precision: 15, scale: 2, default: 0 })
+  @Column({ type: 'integer' })
   comision: number;
 
-  @Column('decimal', { precision: 15, scale: 2, default: 0 })
+  @Column({ type: 'integer' })
   descargue: number;
 
-  @Column('decimal', { precision: 15, scale: 2, default: 0 })
+  @Column({ type: 'integer' })
   cheque: number;
 
-  @Column('decimal', { precision: 15, scale: 2 })
+  @Column({ type: 'integer' })
   total_neto: number;
 
-  @Column('decimal', { precision: 15, scale: 2, default: 0 })
+  @Column({ type: 'integer' })
   porcentaje_65: number;
 
-  @Column('decimal', { precision: 15, scale: 2, default: 0 })
+  @Column({ type: 'integer' })
   porcentaje_35: number;
 
-  @Column('decimal', { precision: 15, scale: 2, default: 0 })
+  @Column({ type: 'integer' })
   valor_anticipo: number;
 
-  @Column('decimal', { precision: 15, scale: 2, default: 0 })
+  @Column({ type: 'integer' })
   saldo_a_pagar: number;
 
-  @Column('decimal', { precision: 15, scale: 2, default: 0 })
+  @Column({ type: 'integer' })
   saldos_anticipos: number;
 
   @Column({ default: false })
@@ -74,7 +73,7 @@ export class Viaje {
   empresaId: number;
 
   // Relación con Municipio (Origen)
-  @ManyToOne(() => Municipio)
+  @ManyToOne(() => Municipio, (municipio) => municipio.viajesComoOrigen)
   @JoinColumn({ name: 'origen_id' })
   origen: Municipio;
 
@@ -82,46 +81,22 @@ export class Viaje {
   origenId: number;
 
   // Relación con Municipio (Destino)
-  @ManyToOne(() => Municipio)
+  @ManyToOne(() => Municipio, (municipio) => municipio.viajesComoDestino)
   @JoinColumn({ name: 'destino_id' })
   destino: Municipio;
 
   @Column({ name: 'destino_id' })
   destinoId: number;
 
+  // Relación con Vehículo
+  @ManyToOne(() => Vehiculo, (vehiculo) => vehiculo.viajes)
+  @JoinColumn({ name: 'vehiculo_id' })
+  vehiculo: Vehiculo;
+
+  @Column({ name: 'vehiculo_id' })
+  vehiculoId: number;
+
   // Relación con Documentos (Un viaje tiene muchos documentos)
   @OneToMany(() => Documento, (documento) => documento.viaje)
   documentos: Documento[];
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  calculateValues() {
-    // Calcular total neto
-    this.total_neto = parseFloat(
-      (this.valor - (this.comision || 0) - (this.descargue || 0)).toFixed(2),
-    );
-
-    // Calcular porcentajes
-    this.porcentaje_65 = parseFloat((this.total_neto * 0.65).toFixed(2));
-    this.porcentaje_35 = parseFloat((this.total_neto * 0.35).toFixed(2));
-
-    // Calcular saldos si hay anticipo
-    if (this.valor_anticipo && this.valor_anticipo > 0) {
-      this.saldo_a_pagar = parseFloat(
-        (this.valor - this.valor_anticipo).toFixed(2),
-      );
-
-      this.saldos_anticipos = parseFloat(
-        (
-          this.valor_anticipo -
-          this.porcentaje_65 -
-          (this.comision || 0) -
-          (this.descargue || 0)
-        ).toFixed(2),
-      );
-    } else {
-      this.saldo_a_pagar = this.valor;
-      this.saldos_anticipos = 0;
-    }
-  }
 }

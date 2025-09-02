@@ -13,6 +13,17 @@ import {
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export class CreateViajeDto {
+  // Si quieres que sea opcional (no recomendado para tu caso)
+  @ApiProperty({
+    description: 'ID del vehículo asignado al viaje',
+    example: 1,
+    required: true,
+  })
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  vehiculoId?: number;
+
   @ApiProperty({
     description: 'Número de manifiesto del viaje',
     example: 'MNFT-2023-001',

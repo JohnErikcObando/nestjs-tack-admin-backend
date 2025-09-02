@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import {
   CreateMovimientoDto,
@@ -25,6 +26,12 @@ export class MovimientoController {
   @Get()
   async findAll() {
     return this.movimientoService.findAll();
+  }
+
+  @Get('estado-financiero')
+  async obtenerEstadoFinanciero(@Query('fecha') fecha?: Date) {
+    const fechaCorte = fecha ? new Date(fecha) : undefined;
+    return this.movimientoService.obtenerEstadoFinanciero(fechaCorte);
   }
 
   @Get(':id')

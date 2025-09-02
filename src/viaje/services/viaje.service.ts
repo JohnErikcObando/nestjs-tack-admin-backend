@@ -1,5 +1,5 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 
 import {
   CreateViajeDto,
@@ -22,14 +22,21 @@ export class ViajeService {
   }
 
   // Obtener todos los viajes
-  async findAll(): Promise<Viaje[]> {
+  async findAll(fecha_inicio?: Date, fecha_final?: Date): Promise<Viaje[]> {
+    const where: any = {};
+
+    if (fecha_inicio && fecha_final) {
+      const startDate = new Date(fecha_inicio);
+      const endDate = new Date(fecha_final);
+      endDate.setDate(endDate.getDate() + 1); // Incluir fecha final completa
+
+      where.fecha = Between(startDate, endDate);
+    }
+
     return await this.viajeRepository.find({
-      relations: [
-        'empresa', // Carga la empresa
-        'origen', // Carga el municipio origen
-        'destino', // Carga el municipio destino
-        'documentos', // Carga los documentos asociados
-      ],
+      where,
+      order: { fecha: 'DESC' },
+      relations: ['empresa', 'origen', 'destino', 'documentos'],
     });
   }
 
@@ -39,8 +46,8 @@ export class ViajeService {
       where: { id },
       relations: [
         'empresa', // Carga la empresa
-        'origen', // Carga el municipio origen
-        'destino', // Carga el municipio destino
+        'origen.departamento', // Carga el municipio origen
+        'destino.departamento', // Carga el municipio destino
         'documentos', // Carga los documentos asociados
       ],
     });

@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDateString,
   IsEnum,
   IsNotEmpty,
@@ -52,6 +53,42 @@ export class CreateMovimientoDto {
   })
   @IsOptional()
   link?: string;
+
+  @ApiProperty({
+    description: 'Indica si el pago está completado',
+    example: false,
+    required: false,
+    default: true,
+  })
+  @IsOptional()
+  @IsBoolean()
+  pago?: boolean;
 }
 
 export class UpdateMovimientoDto extends PartialType(CreateMovimientoDto) {}
+
+export class EstadoFinancieroDto {
+  @ApiProperty({
+    example: 1500000.0,
+    description: 'Suma total de todos los anticipos registrados',
+    type: Number,
+  })
+  @IsNumber()
+  total_anticipos: number;
+
+  @ApiProperty({
+    example: 500000.0,
+    description: 'Suma total de gastos pendientes de pago',
+    type: Number,
+  })
+  @IsNumber()
+  total_gastos_pendientes: number;
+
+  @ApiProperty({
+    example: 1000000.0,
+    description: 'Saldo final (total_anticipos - total_gastos_pendientes)',
+    type: Number,
+  })
+  @IsNumber()
+  saldo_final: number;
+}

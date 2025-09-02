@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { Movimiento } from '../entities/movimiento.entity';
 import {
   CreateMovimientoDto,
+  EstadoFinancieroDto,
   UpdateMovimientoDto,
 } from '../dto/movimiento.dto';
 
@@ -49,5 +50,26 @@ export class MovimientoService {
   async remove(id: number): Promise<void> {
     const movimiento = await this.findOne(id); // Verifica si el movimiento existe
     await this.movimientoRepository.remove(movimiento);
+  }
+
+  async obtenerEstadoFinanciero(
+    fechaCorte?: Date,
+  ): Promise<EstadoFinancieroDto> {
+    const fechaParam = fechaCorte
+      ? fechaCorte.toISOString().split('T')[0]
+      : null;
+    const query = fechaParam
+      ? `SELECT * FROM obtener_estado_financiero('${fechaParam}')`
+      : 'SELECT * FROM obtener_estado_financiero(NULL)';
+
+    const result = await this.movimientoRepository.query(query);
+
+    return {
+      total_anticipos: parseFloat(result[0]?.total_anticipos || '0'),
+      total_gastos_pendientes: parseFloat(
+        result[0]?.total_gastos_pendientes || '0',
+      ),
+      saldo_final: parseFloat(result[0]?.saldo_final || '0'),
+    };
   }
 }

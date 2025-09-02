@@ -10,6 +10,7 @@ import { DepartamentoModule } from './departamento/departamento.module';
 import { DocumentosModule } from './documentos/documentos.module';
 import { MovimientosModule } from './movimientos/movimientos.module';
 import { TipoDocumentosModule } from './tipo_documentos/tipo_documentos.module';
+import { VehiculoModule } from './vehiculo/vehiculo.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { TipoDocumentosModule } from './tipo_documentos/tipo_documentos.module';
     DocumentosModule,
     MovimientosModule,
     TipoDocumentosModule,
+    VehiculoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

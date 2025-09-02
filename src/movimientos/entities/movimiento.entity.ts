@@ -20,6 +20,9 @@ export class Movimiento {
   @Column({ nullable: true })
   link: string;
 
+  @Column({ default: true })
+  pago: boolean;
+
   @Column({
     name: 'created_at',
     type: 'timestamp',
